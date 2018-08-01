@@ -3,7 +3,6 @@
 
 #include <string>
 #include <ctime>
-#include <thread>
 
 #pragma warning(disable : 4244 4305) // double <-> float conversions
 
@@ -41,7 +40,17 @@ void set_status_text(std::string str, DWORD time = 2500, bool isGxtEntry = false
 	statusTextGxtEntry = isGxtEntry;
 }
 
-void raycast(Vector3 source, Vector3 direction, float maxDistance, int intersectFlags) {
+struct ray {
+	int rayResult;
+	bool hit;
+	Vector3 endCoord;
+	Vector3 surfaceNormal;
+	int hitEntityHandle;
+	std::string entityTypeText;
+};
+
+ray raycast(Vector3 source, Vector3 direction, float maxDistance, int intersectFlags) {
+	ray result;
 	float targetX = source.x + (direction.x * maxDistance);
 	float targetY = source.y + (direction.y * maxDistance);
 	float targetZ = source.z + (direction.z * maxDistance);
@@ -57,6 +66,11 @@ void raycast(Vector3 source, Vector3 direction, float maxDistance, int intersect
 	surfaceNormal.y = 0;
 	surfaceNormal.z = 0;
 	int rayResult = WORLDPROBE::_GET_RAYCAST_RESULT(rayHandle, &hit, &endCoord, &surfaceNormal, &hitEntityHandle);
+	result.rayResult = rayResult;
+	result.hit = hit;
+	result.endCoord = endCoord;
+	result.surfaceNormal = surfaceNormal;
+	result.hitEntityHandle = hitEntityHandle;
 	std::string entityTypeText = "Unknown";
 	if (ENTITY::DOES_ENTITY_EXIST(hitEntityHandle)) {
 		int entityType = ENTITY::GET_ENTITY_TYPE(hitEntityHandle);
@@ -70,7 +84,8 @@ void raycast(Vector3 source, Vector3 direction, float maxDistance, int intersect
 			entityTypeText = "Prop";
 		}
 	}
-	return;
+	result.entityTypeText = entityTypeText;
+	return result;
 }
 
 void ScriptMain()
