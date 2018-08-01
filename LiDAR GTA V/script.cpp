@@ -41,10 +41,36 @@ void set_status_text(std::string str, DWORD time = 2500, bool isGxtEntry = false
 	statusTextGxtEntry = isGxtEntry;
 }
 
-// Updates all features that can be turned off by the game, being called each game frame
-void update_features() 
-{
-	update_status_text();
+void raycast(Vector3 source, Vector3 direction, float maxDistance, int intersectFlags) {
+	float targetX = source.x + (direction.x * maxDistance);
+	float targetY = source.y + (direction.y * maxDistance);
+	float targetZ = source.z + (direction.z * maxDistance);
+	int rayHandle = WORLDPROBE::_CAST_RAY_POINT_TO_POINT(source.x, source.y, source.z, targetX, targetY, targetZ, intersectFlags, 0, 7);
+	int hit = 0;
+	int hitEntityHandle = 0;
+	Vector3 endCoord;
+	endCoord.x = 0;
+	endCoord.y = 0;
+	endCoord.z = 0;
+	Vector3 surfaceNormal;
+	surfaceNormal.x = 0;
+	surfaceNormal.y = 0;
+	surfaceNormal.z = 0;
+	int rayResult = WORLDPROBE::_GET_RAYCAST_RESULT(rayHandle, &hit, &endCoord, &surfaceNormal, &hitEntityHandle);
+	std::string entityTypeText = "Unknown";
+	if (ENTITY::DOES_ENTITY_EXIST(hitEntityHandle)) {
+		int entityType = ENTITY::GET_ENTITY_TYPE(hitEntityHandle);
+		if (entityType == 1) {
+			entityTypeText = "Ped";
+		}
+		else if (entityType == 2) {
+			entityTypeText = "Vehicle";
+		}
+		else if (entityType == 3) {
+			entityTypeText = "Prop";
+		}
+	}
+	return;
 }
 
 void ScriptMain()
@@ -56,7 +82,7 @@ void ScriptMain()
 		{
 
 		}
-		update_features();
+		update_status_text();
 		WAIT(0);
 	}
 }
