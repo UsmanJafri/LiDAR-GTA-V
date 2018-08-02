@@ -3,6 +3,8 @@
 
 #include <string>
 #include <ctime>
+#define _USE_MATH_DEFINES
+#include <math.h>
 
 #pragma warning(disable : 4244 4305) // double <-> float conversions
 
@@ -86,6 +88,19 @@ ray raycast(Vector3 source, Vector3 direction, float maxDistance, int intersectF
 	}
 	result.entityTypeText = entityTypeText;
 	return result;
+}
+
+ray angleOffsetRaycast(double angleOffsetX, double angleOffsetZ,int range){
+	Vector3 rotation = CAM::GET_GAMEPLAY_CAM_ROT(2);
+	Vector3 position = CAM::GET_GAMEPLAY_CAM_COORD();
+	float rotationX = rotation.x + (angleOffsetX * (M_PI / 180.0));
+	float rotationZ = rotation.z + (angleOffsetZ * (M_PI / 180.0));
+	float absX = abs(cos(rotationX));
+	Vector3 direction;
+	direction.x = sin(rotationZ) * absX * -1;
+	direction.y = cos(rotationZ) * absX;
+	direction.z = sin(rotationZ);
+	return raycast(position, direction, range, -1);
 }
 
 void ScriptMain()
