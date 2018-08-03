@@ -12,7 +12,7 @@ LiDAR GTA V
 ## Installation
 
 1. Install ScriptHookV following its accompanying instructions.
-2. Copy-paste *LiDAR GTA V.asi* found in [*bin/Release*](/LiDAR-GTA-V/bin/Release/) into your GTA-V directory (the folder containing *GTAV.exe*)
+2. Copy-paste *LiDAR GTA V.asi* found in [*bin/Release*](https://github.com/UsmanJafri/LiDAR-GTA-V/tree/master/LiDAR%20GTA%20V/bin/Release) into your GTA-V directory (the folder containing *GTAV.exe*)
 3. Make a folder named *LiDAR Output* in your game directory.
 
 ## How to use
@@ -40,7 +40,7 @@ LiDAR GTA V
 
 ## Acknowledgements
 
-* [Native Trainer](http://www.dev-c.com/gtav/scripthookv/) (a ScriptHookV sample) was used a base project to import configuration.
+* [Native Trainer](http://www.dev-c.com/gtav/scripthookv/) (a ScriptHookV sample) was used as base project to import configuration.
 
 ## Samples
 
