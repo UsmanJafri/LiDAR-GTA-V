@@ -15,7 +15,7 @@ void notificationOnLeft(std::string notificationText) {
 		std::string divideText = notificationText.substr(i, min(maxLen, notificationText.length() - i));
 		const char* divideTextAsConstCharArray = divideText.c_str();
 		char* divideTextAsCharArray = new char[divideText.length() + 1];
-		strcpy(divideTextAsCharArray, divideTextAsConstCharArray);
+		strcpy_s(divideTextAsCharArray, divideText.length() + 1, divideTextAsConstCharArray);
 		UI::_ADD_TEXT_COMPONENT_STRING(divideTextAsCharArray);
 	}
 	int handle = UI::_DRAW_NOTIFICATION(false, 1);
@@ -134,9 +134,9 @@ void ScriptMain()
 	srand(GetTickCount());
 	while (true)
 	{
-		if (IsKeyJustUp(VK_F7))
+		if (IsKeyJustUp(VK_F6))
 		{
-			lidar(0, 360, -10, 30,0.25,0.25,75,"scripts/dataset/LiDAR_PointCloud_GTAV.ply");
+			lidar(0, 360, -10, 30, 0.25, 0.25, 75, "LiDAR Output/LiDAR_GTAV.ply");
 		}
 		WAIT(0);
 	}
