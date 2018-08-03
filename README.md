@@ -1,7 +1,9 @@
 LiDAR GTA V
 ============================
 *A plugin for Grand Theft Auto V that generates a labeled LiDAR point cloud form the game environment.*
-![Traffic Scene LiDAR](/samples/LiDAR Sample - Traffic.png?raw=true)
+
+![GitHub Logo](/samples/LiDAR Sample - Traffic.png)
+
 ## Requirements
 
 * [Grand Theft Auto V](https://store.steampowered.com/app/271590/Grand_Theft_Auto_V/)
@@ -41,6 +43,9 @@ LiDAR GTA V
 * [Native Trainer](http://www.dev-c.com/gtav/scripthookv/) (a ScriptHookV sample) was used a base project to import configuration.
 
 ## Samples
+
 ![Michael Home LiDAR](/samples/LiDAR Sample - Michael Home.png?raw=true)
+
 ![Test Area LiDAR](/samples/LiDAR Sample - Test Area.png?raw=true)
+
 ![Traffic Scene LiDAR](/samples/LiDAR Sample - Traffic.png?raw=true)
