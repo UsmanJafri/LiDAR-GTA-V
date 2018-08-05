@@ -11,19 +11,18 @@ LiDAR GTA V
 
 ## Installation
 
-1. Install ScriptHookV following its accompanying instructions.
-2. Copy-paste *LiDAR GTA V.asi* found in [*bin/Release*](https://github.com/UsmanJafri/LiDAR-GTA-V/tree/master/LiDAR%20GTA%20V/bin/Release) into your GTA-V directory (the folder containing *GTAV.exe*)
-3. Make a folder named *LiDAR Output* in your game directory.
+1. Install [ScriptHookV](http://www.dev-c.com/gtav/scripthookv/) following its accompanying instructions.
+2. Copy-paste *LiDAR GTA V.asi* and the *LiDAR GTA V* folder found in [*bin/Release*](https://github.com/UsmanJafri/LiDAR-GTA-V/tree/master/LiDAR%20GTA%20V/bin/Release) into your GTA-V directory (the folder containing *GTAV.exe*)
 
 ## How to use
 
-* Press V to cycle through camera modes until first person mode is enabled.
-* Press F6 to generate a LiDAR point cloud of the world.
-* The point cloud will span 360 degrees horizontally, and -10 to 30 degrees from the aim position vertically with a range of 75 meters.
-* Parameters including Horizontal FOV, Vertical FOV, Range, Density and output filename can be configured by editing the input parameters to the *lidar* function on *line 139* of *script.cpp* and rebuilding the solution.
-* Output file is located under *#gamedirectory#/LiDAR_Output/LiDAR_GTAV.ply*
-* The output is a Polygon File Format (.PLY) file containing only vertex data.
-* Vertex Color Code:
+1. Navigate to *#your_game_directory#/LiDAR GTA V/LIDAR GTA V.cfg* and edit the parameters as needed. The parameters include: Horizontal FOV, Vertical FOV, Range, Density and Output Filename.
+2. Startup GTAV in a story mode.
+3. Press V to cycle through camera modes until first person mode is enabled.
+4. Press F6 to generate a LiDAR point cloud of the world.
+5. Output file is located under *#game_directory#/LiDAR GTA V/#your_chosen_filename#.ply*
+6. The output is a Polygon File Format (.PLY) file containing only vertex data.
+7. Vertex Color Code:
 
 | Vertex Color | Label |
 |---|---|

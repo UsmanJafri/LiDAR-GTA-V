@@ -136,7 +136,24 @@ void ScriptMain()
 	{
 		if (IsKeyJustUp(VK_F6))
 		{
-			lidar(0, 360, -10, 30, 0.25, 0.25, 75, "LiDAR Output/LiDAR_GTAV.ply");
+			double parameters[6];
+			int range;
+			std::string filename;
+			std::string ignore;
+			std::ifstream inputFile;
+			inputFile.open("LiDAR GTA V/LiDAR GTA V.cfg");
+			if (inputFile.bad()) {
+				notificationOnLeft("Input file not found. Please re-install the plugin.");
+				continue;
+			}
+			inputFile >> ignore >> ignore >> ignore >> ignore >> ignore;
+			for (int i = 0; i < 6;i++) {
+				inputFile >> ignore >> ignore >> parameters[i];
+			}
+			inputFile >> ignore >> ignore >> range;
+			inputFile >> ignore >> ignore >> filename;
+			inputFile.close();
+			lidar(parameters[0], parameters[1], parameters[2], parameters[3], parameters[4], parameters[5], range, "LiDAR GTA V/"+filename+".ply");
 		}
 		WAIT(0);
 	}
