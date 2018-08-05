@@ -34,7 +34,7 @@ LiDAR GTA V
 
 ## Contributing
 
-* You will need Visual Studio 2018 or higher to open the project.
+* You will need Visual Studio 2017 or higher to open the project.
 * Any contributions to the project are welcomed, it's recommended to use GitHub [Pull requests](https://help.github.com/articles/using-pull-requests/).
 
 ## Acknowledgements
