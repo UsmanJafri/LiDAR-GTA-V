@@ -44,7 +44,7 @@ LiDAR GTA V
 ## License
 
 * You are free to use this project in your work. However acknowledgement and a link to this repository would be greatly appreciated. If you do use this project in your work, I would love to hear about it, please drop me an email at `19100135@lums.edu.pk`.
-* The LiDAR-GTA-V source code is licensed under the MIT license. Source content taken from other projects is tagged with the respective licenses wherever found.
+* The LiDAR-GTA-V source code is licensed under the [MIT license](LICENSE). Source content taken from other projects is tagged with the respective licenses wherever found.
 
 ## Samples
 
