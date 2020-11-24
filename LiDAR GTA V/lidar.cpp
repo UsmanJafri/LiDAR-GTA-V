@@ -31,22 +31,27 @@ struct ray {
 };
 
 ray raycast(Vector3 source, Vector3 direction, float maxDistance, int intersectFlags) {
-	ray result;
-	float targetX = source.x + (direction.x * maxDistance);
-	float targetY = source.y + (direction.y * maxDistance);
-	float targetZ = source.z + (direction.z * maxDistance);
-	int rayHandle = WORLDPROBE::_CAST_RAY_POINT_TO_POINT(source.x, source.y, source.z, targetX, targetY, targetZ, intersectFlags, 0, 7);
 	int hit = 0;
 	int hitEntityHandle = -1;
+
 	Vector3 hitCoordinates;
+	Vector3 surfaceNormal;
+
 	hitCoordinates.x = 0;
 	hitCoordinates.y = 0;
 	hitCoordinates.z = 0;
-	Vector3 surfaceNormal;
 	surfaceNormal.x = 0;
 	surfaceNormal.y = 0;
 	surfaceNormal.z = 0;
+
+	float targetX = source.x + (direction.x * maxDistance);
+	float targetY = source.y + (direction.y * maxDistance);
+	float targetZ = source.z + (direction.z * maxDistance);
+
+	int rayHandle = WORLDPROBE::_CAST_RAY_POINT_TO_POINT(source.x, source.y, source.z, targetX, targetY, targetZ, intersectFlags, 0, 7);
 	int rayResult = WORLDPROBE::_GET_RAYCAST_RESULT(rayHandle, &hit, &hitCoordinates, &surfaceNormal, &hitEntityHandle);
+
+	ray result;
 	result.rayResult = rayResult;
 	result.hit = hit;
 	result.hitCoordinates = hitCoordinates;
@@ -57,11 +62,9 @@ ray raycast(Vector3 source, Vector3 direction, float maxDistance, int intersectF
 		int entityType = ENTITY::GET_ENTITY_TYPE(hitEntityHandle);
 		if (entityType == 1) {
 			entityTypeName = "GTA.Ped";
-		}
-		else if (entityType == 2) {
+		} else if (entityType == 2) {
 			entityTypeName = "GTA.Vehicle";
-		}
-		else if (entityType == 3) {
+		} else if (entityType == 3) {
 			entityTypeName = "GTA.Prop";
 		}
 	}
@@ -69,53 +72,46 @@ ray raycast(Vector3 source, Vector3 direction, float maxDistance, int intersectF
 	return result;
 }
 
-ray angleOffsetRaycast(double angleOffsetX, double angleOffsetZ,int range){
-	Vector3 rot = CAM::GET_GAMEPLAY_CAM_ROT(2);
-	double rotationX = (rot.x + angleOffsetX) * (M_PI / 180.0);
-	double rotationZ = (rot.z + angleOffsetZ) * (M_PI / 180.0);
+ray angleOffsetRaycast(Vector3 source, Vector3 cameraRotation, double angleOffsetX, double angleOffsetZ, int range){
+	double rotationX = (cameraRotation.x + angleOffsetX) * (M_PI / 180.0);
+	double rotationZ = (cameraRotation.z + angleOffsetZ) * (M_PI / 180.0);
 	double multiplyXY = abs(cos(rotationX));
 	Vector3 direction;
 	direction.x = sin(rotationZ) * multiplyXY * -1;
 	direction.y = cos(rotationZ) * multiplyXY;
 	direction.z = sin(rotationX);
-	ray result = raycast(CAM::GET_GAMEPLAY_CAM_COORD(), direction, range, -1);
-	return result;
+	return raycast(source, direction, range, -1);
 }
 
-void lidar(double horiFovMin, double horiFovMax, double vertFovMin, double vertFovMax, double horiStep, double vertStep,int range,std::string filePath)
-{
-	GAMEPLAY::SET_GAME_PAUSED(true);
-	TIME::PAUSE_CLOCK(true);
+void lidar(double horiFovMin, double horiFovMax, double vertFovMin, double vertFovMax, double horiStep, double vertStep,int range,std::string filePath) {
 	double vertexCount = (horiFovMax - horiFovMin) * (1 / horiStep) * (vertFovMax - vertFovMin) * (1 / vertStep);
 	std::ofstream fileOutput;
 	fileOutput.open(filePath);
 	fileOutput << "ply\nformat ascii 1.0\nelement vertex " + std::to_string((int)vertexCount) + "\nproperty float x\nproperty float y\nproperty float z\nproperty uchar red\nproperty uchar green\nproperty uchar blue\nend_header\n";
-	for (double z = horiFovMin; z < horiFovMax; z += horiStep)
-	{
+	
+	GAMEPLAY::SET_GAME_PAUSED(true);
+	TIME::PAUSE_CLOCK(true);
+	Vector3 rot = CAM::GET_GAMEPLAY_CAM_ROT(2);
+	Vector3 coord = CAM::GET_GAMEPLAY_CAM_COORD();
+	
+	for (double z = horiFovMin; z < horiFovMax; z += horiStep) {
 		std::string vertexData = "";
-		for (double x = vertFovMin; x < vertFovMax; x += vertStep)
-		{
+		for (double x = vertFovMin; x < vertFovMax; x += vertStep) {
 			std::string entityName3 = "None";
 			int entityHash = 0;
 			unsigned char r = 0; unsigned char g = 0; unsigned char b = 0;
-			ray result = angleOffsetRaycast(x, z, range);
-			if (result.hit)
-			{
+			ray result = angleOffsetRaycast(coord, rot, x, z, range);
+
+			if (result.hit) {
 				r = 255; g = 255; b = 255;
 			}
-			if (result.hitEntityHandle != -1)
-			{
+			if (result.hitEntityHandle != -1) {
 				entityName3 = result.entityTypeName;
-				if (entityName3 == "GTA.Vehicle")
-				{
+				if (entityName3 == "GTA.Vehicle") {
 					r = 255; g = 0; b = 0;
-				}
-				else if (entityName3 == "GTA.Ped")
-				{
+				} else if (entityName3 == "GTA.Ped") {
 					r = 0; g = 255; b = 0;
-				}
-				else if (entityName3 == "GTA.Prop")
-				{
+				} else if (entityName3 == "GTA.Prop") {
 					r = 0; g = 0; b = 255;
 				}
 			}
@@ -123,19 +119,16 @@ void lidar(double horiFovMin, double horiFovMax, double vertFovMin, double vertF
 		}
 		fileOutput << vertexData;
 	}
-	fileOutput.close();
 	GAMEPLAY::SET_GAME_PAUSED(false);
 	TIME::PAUSE_CLOCK(false);
+	fileOutput.close();
 	notificationOnLeft("LiDAR Point Cloud written to file.");
 }
 
-void ScriptMain()
-{
+void ScriptMain() {
 	srand(GetTickCount());
-	while (true)
-	{
-		if (IsKeyJustUp(VK_F6))
-		{
+	while (true) {
+		if (IsKeyJustUp(VK_F6)) {
 			double parameters[6];
 			int range;
 			std::string filename;
